@@ -38,6 +38,7 @@ dependencies:
   sidebarx: ^0.16.0
   font_awesome_flutter: ^9.2.0
   firebase_core: ^2.24.1
+  intl: ^0.17.0
   cloud_firestore: ^4.13.6
   provider: ^6.0.0
 

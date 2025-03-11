@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'logged_in/main.dart';
 
 void main() {
   runApp(const Admin());
@@ -13,55 +12,38 @@ class Admin extends StatefulWidget {
 }
 
 class AdminState extends State<Admin> {
-  // State to hold current user data
-  Map<String, String> _currentUserData = {
-    'email': '',
+  // Predefined admin user data (for login only)
+  final Map<String, String> _adminUser = {
+    'email': 'admin@example.com', // Predefined admin email
+    'password': 'admin1234',      // Predefined admin password
   };
 
-  // State to store registered users (in-memory for this example)
-  final List<Map<String, String>> _registeredUsers = [];
-
-  // Method to update current user data upon successful login
+  // Method to handle successful login
   void loginUser(String email) {
-    setState(() {
-      _currentUserData['email'] = email;
-    });
-    print('User logged in with email: $email'); // Just for demonstration
+    print('Admin logged in with email: $email'); // For demonstration
   }
-
-  // Method to register a new user
-  void registerUser(Map<String, String> userData) {
-    setState(() {
-      _registeredUsers.add(userData);
-    });
-    print('Registered new user: $userData'); // Just for demonstration
-  }
-
-  // Getter for registered users (optional, for debugging or more complex logic)
-  List<Map<String, String>> get registeredUsers => _registeredUsers;
-
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Welcome App',
-      theme: ThemeData.light().copyWith( // Applying theme customization
+      title: 'Admin Login',
+      theme: ThemeData.light().copyWith(
         primaryColor: Colors.blue,
-        colorScheme: ColorScheme.light(secondary: Colors.blueAccent),
+        colorScheme: const ColorScheme.light(secondary: Colors.blueAccent),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             padding: const EdgeInsets.symmetric(vertical: 15),
           ),
         ),
-        inputDecorationTheme: InputDecorationTheme( // Default InputDecorationTheme for better consistency
+        inputDecorationTheme: InputDecorationTheme(
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           filled: true,
           fillColor: Colors.grey[200],
           contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         ),
       ),
-      home: const AuthPage(), // Use AuthPage to decide between SignIn and SignUp
+      home: const AuthPage(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -75,39 +57,25 @@ class AuthPage extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(30.0), // Added padding to AuthPage content
+          padding: const EdgeInsets.all(30.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch, // Stretch buttons to fill width
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               const Text(
-                'Welcome!',
+                'Admin Access',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold), // Made Welcome text bolder and larger
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 40), // Increased spacing
+              const SizedBox(height: 40),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const SignInScreen(),
-                    ),
+                    MaterialPageRoute(builder: (context) => const SignInScreen()),
                   );
                 },
-                child: const Text('Sign In', style: TextStyle(fontSize: 18)), // Increased button text size
-              ),
-              const SizedBox(height: 20), // Spacing between buttons
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SignUpScreen(),
-                    ),
-                  );
-                },
-                child: const Text('Sign Up', style: TextStyle(fontSize: 18)), // Increased button text size
+                child: const Text('Sign In', style: TextStyle(fontSize: 18)),
               ),
             ],
           ),
@@ -126,7 +94,7 @@ class SignInScreen extends StatefulWidget {
 
 class SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
-  Map<String, String> _signInData = {
+  final Map<String, String?> _signInData = {
     'email': '',
     'password': '',
   };
@@ -138,26 +106,36 @@ class SignInScreenState extends State<SignInScreen> {
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Sign In'),
-        centerTitle: true, // Center the AppBar title for better aesthetics
+        title: const Text('Admin Sign In'),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: Center(
-        child: SingleChildScrollView( // Added SingleChildScrollView for better responsiveness
-          padding: const EdgeInsets.all(30.0), // Increased padding around the form
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(30.0),
           child: Form(
             key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch, // Stretch form elements to fill width
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text('Sign In', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: theme.textTheme.displayLarge?.color), textAlign: TextAlign.center), // Bolder Sign In text
-                const SizedBox(height: 40), // Increased spacing
+                Text(
+                  'Admin Sign In',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: theme.textTheme.displayLarge?.color,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 40),
                 TextFormField(
                   decoration: InputDecoration(
                     labelText: 'Email',
-                    hintText: 'Enter your email',
-                    prefixIcon: Icon(Icons.email, color: theme.iconTheme.color), // Added prefix icon
-                    labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7)),
+                    hintText: 'Enter your admin email',
+                    prefixIcon: Icon(Icons.email, color: theme.iconTheme.color),
+                    labelStyle: TextStyle(
+                        color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7)),
                   ),
                   keyboardType: TextInputType.emailAddress,
                   style: TextStyle(color: theme.textTheme.bodyLarge?.color),
@@ -165,7 +143,8 @@ class SignInScreenState extends State<SignInScreen> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
                     }
-                    if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
+                    if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                        .hasMatch(value)) {
                       return 'Please enter a valid email address';
                     }
                     return null;
@@ -176,14 +155,15 @@ class SignInScreenState extends State<SignInScreen> {
                     });
                   },
                 ),
-                const SizedBox(height: 25), // Increased spacing
+                const SizedBox(height: 25),
                 TextFormField(
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
                     labelText: 'Password',
-                    hintText: 'Enter your password',
-                    prefixIcon: Icon(Icons.lock, color: theme.iconTheme.color), // Added prefix icon
-                    labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7)),
+                    hintText: 'Enter your admin password',
+                    prefixIcon: Icon(Icons.lock, color: theme.iconTheme.color),
+                    labelStyle: TextStyle(
+                        color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7)),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword ? Icons.visibility_off : Icons.visibility,
@@ -212,70 +192,52 @@ class SignInScreenState extends State<SignInScreen> {
                     });
                   },
                 ),
-                const SizedBox(height: 30), // Increased spacing
+                const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // Form is valid, process sign in
-                      String email = _signInData['email']!;
-                      String password = _signInData['password']!;
-
-                      // Access the registered users list from AdminState
-                      AdminState? appState = context.findAncestorStateOfType<AdminState>();
-                      if (appState != null) {
-                        // Check if the entered email and password match any registered user
-                        bool isSignedIn = false;
-                        for (var user in appState.registeredUsers) {
-                          if (user['email'] == email && user['password'] == password) {
-                            isSignedIn = true;
-                            break;
-                          }
-                        }
-
-                        if (isSignedIn) {
-                          appState.loginUser(email); // Call loginUser to update user state in Admin
+                      final email = _signInData['email'];
+                      final password = _signInData['password'];
+                      if (email != null && password != null) {
+                        AdminState? appState =
+                            context.findAncestorStateOfType<AdminState>();
+                        if (appState != null &&
+                            appState._adminUser['email'] == email &&
+                            appState._adminUser['password'] == password) {
+                          appState.loginUser(email);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('Sign In Successful!'),
+                              content: Text('Admin Sign In Successful!'),
                               backgroundColor: Colors.green,
                             ),
                           );
-                          Navigator.pushReplacement( // Navigate to QuizAppPlaceholder on successful login
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(builder: (context) => const QuizAppScreen()),
                           );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('Sign In Failed. Invalid credentials.'),
+                              content: Text('Admin Sign In Failed. Invalid credentials.'),
                               backgroundColor: Colors.red,
                             ),
                           );
                         }
-                      } else {
-                        // Handle error if AdminState is not found
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Error: Authentication state not found.'),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
                       }
                     }
                   },
-                  child: const Text('Sign In', style: TextStyle(fontSize: 18)), // Increased button text size
+                  child: const Text('Sign In', style: TextStyle(fontSize: 18)),
                 ),
                 const SizedBox(height: 20),
-                TextButton( // Using TextButton for a "Forgot Password?" link style
+                TextButton(
                   onPressed: () {
-                    // TODO: Implement forgot password functionality
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Forgot Password? feature not implemented yet.'),
+                        content: Text('Forgot Password? Contact system administrator.'),
                       ),
                     );
                   },
-                  child: const Text('Forgot Password?', style: TextStyle(fontSize: 16)), // Slightly smaller text for link
+                  child: const Text('Forgot Password?', style: TextStyle(fontSize: 16)),
                 ),
               ],
             ),
@@ -286,241 +248,16 @@ class SignInScreenState extends State<SignInScreen> {
   }
 }
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
-
-  @override
-  SignUpScreenState createState() => SignUpScreenState();
-}
-
-class SignUpScreenState extends State<SignUpScreen> {
-  final _formKey = GlobalKey<FormState>();
-  Map<String, String> _signUpData = {
-    'firstName': '',
-    'lastName': '',
-    'email': '',
-    'password': '',
-    'confirmPassword': '',
-  };
-  bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
+class QuizAppScreen extends StatelessWidget {
+  const QuizAppScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('Sign Up'),
-        centerTitle: true, // Center the AppBar title
-      ),
-      body: Center(
-        child: SingleChildScrollView( // Added SingleChildScrollView for responsiveness
-          padding: const EdgeInsets.all(30.0), // Increased padding around the form
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch, // Stretch form elements to fill width
-              children: [
-                Text('Sign Up', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: theme.textTheme.displayLarge?.color), textAlign: TextAlign.center), // Bolder Sign Up text
-                const SizedBox(height: 40), // Increased spacing
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'First Name',
-                    hintText: 'Enter your first name',
-                    prefixIcon: Icon(Icons.person, color: theme.iconTheme.color), // Added prefix icon
-                    labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7)),
-                  ),
-                  style: TextStyle(color: theme.textTheme.bodyLarge?.color),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your first name';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      _signUpData['firstName'] = value;
-                    });
-                  },
-                ),
-                const SizedBox(height: 25), // Increased spacing
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Last Name',
-                    hintText: 'Enter your last name',
-                    prefixIcon: Icon(Icons.person, color: theme.iconTheme.color), // Added prefix icon
-                    labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7)),
-                  ),
-                  style: TextStyle(color: theme.textTheme.bodyLarge?.color),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your last name';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      _signUpData['lastName'] = value;
-                    });
-                  },
-                ),
-                const SizedBox(height: 25), // Increased spacing
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    hintText: 'Enter your email',
-                    prefixIcon: Icon(Icons.email, color: theme.iconTheme.color), // Added prefix icon
-                    labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7)),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  style: TextStyle(color: theme.textTheme.bodyLarge?.color),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
-                      return 'Please enter a valid email address';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      _signUpData['email'] = value;
-                    });
-                  },
-                ),
-                const SizedBox(height: 25), // Increased spacing
-                TextFormField(
-                  obscureText: _obscurePassword,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    hintText: 'Enter your password',
-                    prefixIcon: Icon(Icons.lock, color: theme.iconTheme.color), // Added prefix icon
-                    labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7)),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                        color: theme.iconTheme.color,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
-                      },
-                    ),
-                  ),
-                  style: TextStyle(color: theme.textTheme.bodyLarge?.color),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
-                    }
-                    if (value.length < 8) {
-                      return 'Password must be at least 8 characters long';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      _signUpData['password'] = value;
-                    });
-                  },
-                ),
-                const SizedBox(height: 25), // Increased spacing
-                TextFormField(
-                  obscureText: _obscureConfirmPassword,
-                  decoration: InputDecoration(
-                    labelText: 'Confirm Password',
-                    hintText: 'Confirm your password',
-                    prefixIcon: Icon(Icons.lock_outline, color: theme.iconTheme.color), // Added prefix icon
-                    labelStyle: TextStyle(color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7)),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
-                        color: theme.iconTheme.color,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _obscureConfirmPassword = !_obscureConfirmPassword;
-                        });
-                      },
-                    ),
-                  ),
-                  style: TextStyle(color: theme.textTheme.bodyLarge?.color),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please confirm your password';
-                    }
-                    if (value != _signUpData['password']) {
-                      return 'Passwords do not match';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      _signUpData['confirmPassword'] = value;
-                    });
-                  },
-                ),
-                const SizedBox(height: 30), // Increased spacing
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      // Form is valid, process sign up
-                      // Prepare user data to be registered (exclude confirmPassword)
-                      Map<String, String> newUser = {
-                        'firstName': _signUpData['firstName']!,
-                        'lastName': _signUpData['lastName']!,
-                        'email': _signUpData['email']!,
-                        'password': _signUpData['password']!,
-                      };
-
-                      // Access the registerUser function from AdminState
-                      AdminState? appState = context.findAncestorStateOfType<AdminState>();
-                      if (appState != null) {
-                        appState.registerUser(newUser); // Register the new user in Admin State
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Sign Up Successful! Please sign in.'),
-                            backgroundColor: Colors.green,
-                          ),
-                        );
-                        Navigator.pushReplacement( // Navigate to SignInScreen after successful signup
-                          context,
-                          MaterialPageRoute(builder: (context) => const SignInScreen()),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Error: Authentication state not found.'),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                      }
-                    }
-                  },
-                  child: const Text('Sign Up', style: TextStyle(fontSize: 18)), // Increased button text size
-                ),
-              ],
-            ),
-          ),
-        ),
+      appBar: AppBar(title: const Text('Quiz App')),
+      body: const Center(
+        child: Text('Welcome to the Quiz App!', style: TextStyle(fontSize: 24)),
       ),
     );
   }
 }
-
-// class QuizAppPlaceholder extends StatelessWidget { // Placeholder for Quiz App
-//   const QuizAppPlaceholder({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Quiz App')),
-//       body: const Center(
-//         child: Text('Welcome to the Quiz App!', style: TextStyle(fontSize: 24)),
-//       ),
-//     );
-//   }
-// }
