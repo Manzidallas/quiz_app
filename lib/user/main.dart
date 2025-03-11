@@ -215,7 +215,7 @@ class SignInScreenState extends State<SignInScreen> {
                 const SizedBox(height: 30), // Increased spacing
                 ElevatedButton(
                   onPressed: () {
-                    if (!_formKey.currentState!.validate()) {
+                    if (_formKey.currentState!.validate()) {
                       // Form is valid, process sign in
                       String email = _signInData['email']!;
                       String password = _signInData['password']!;
